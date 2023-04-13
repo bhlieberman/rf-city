@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+    @apply bg-amber-100
+}
+
+#app {
+    @apply flex flex-col items-center
+}
+
+#main {
+    @apply flex flex-col items-center
+}
+
+#top-banner {
+    @apply w-full bg-slate-200
+}
+
+#static-map {
+    @apply flex flex-col items-center border border-collapse border-slate-100 mt-2 mb-2
+}
+
+#user-info-entry form {
+    @apply flex flex-col items-center bg-slate-200 p-3 mt-2 mb-auto
+}
+
+#destination, #date-from, #date-to {
+    @apply shadow-md p-2 m-2
+}
+
+#submit-search {
+    @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded
+}
+
+#city-info {
+    @apply flex flex-col items-center
+}
+
+#seven-day-forecast {
+    @apply flex flex-col items-center
+}
+
+#daily-forecast {
+    @apply flex justify-between bg-slate-200 border rounded-lg w-5/6
+}
+
+#daily-forecast p {
+    @apply p-5 bg-slate-200 m-auto
+}
+
+#date {
+    @apply font-bold
+}
+
+#nav {
+    @apply list-none flex items-center bg-slate-100 p-2 space-x-10 w-full
+}
+
+#nav li {
+    @apply p-2 text-2xl
+}
+
+h1 {
+    @apply text-5xl m-auto
+}
+
+h2 {
+    @apply text-3xl
+}
+
+h1, h2, h3, h4, h5, h6 {
+    @apply m-auto
+}
+
+#route-link:hover {
+    @apply bg-pink-200
+}
