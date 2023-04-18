@@ -2,33 +2,78 @@
   (:require [re-frame.core :as re-frame :refer [inject-cofx reg-fx reg-cofx reg-event-fx reg-event-db]]
             [reitit.frontend.controllers :as rfc]
             [reitit.frontend.easy :as rfe :refer [push-state]]
-            [day8.re-frame.http-fx] 
+            [day8.re-frame.http-fx]
+            [re-chain.core :as chain]
             [ajax.core :as ajax]
+            [fork.re-frame :as fork]
             [goog.object :as gobj]))
+
+(reg-event-fx
+ :debug/test-submit
+ [(inject-cofx :config/api-keys)]
+ (fn [{:keys [location-iq-api-key db]} [_ {:keys [path values]}]]
+   {:db (fork/set-submitting db path true)
+    :http-xhrio {:method :get
+                 :uri "https://us1.locationiq.com/v1/search.php"
+                 :timeout 8000
+                 :params {:key location-iq-api-key
+                          :q (get values "destination")
+                          :format "json"}
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success [:debug/log-success]
+                 :on-failure [:debug/log-failure]}}))
+
+(reg-event-fx
+ :debug/log-success
+ (fn [{:keys [db]} [_ result path]]
+   (js/console.log (str result))
+   {:db (-> db
+            (assoc :result result)
+            (fork/set-submitting path false)
+            (fork/set-server-message path "Map lookup succeeded!"))}))
+
+(reg-event-fx
+ :debug/log-failure
+ (fn [{:keys [db]} [_ result path]]
+   (js/console.log result)
+   {:db (-> db
+            (fork/set-submitting path false)
+            (fork/set-server-message path "Map lookup failed!"))}))
 
 (reg-event-fx
  :app/handle-form-submission
  [(inject-cofx :config/api-keys)]
- (fn [{:keys [location-iq-api-key]} [_ destination]]
-   {:http-xhrio {:method :get
+ (fn [{:keys [location-iq-api-key db]} [_ {:keys [path values]}]]
+   {:db (fork/set-submitting db path true)
+    :http-xhrio {:method :get
                  :uri "https://us1.locationiq.com/v1/search.php"
                  :timeout 8000
                  :params {:key location-iq-api-key
-                          :q destination
+                          :q (get values "destination")
                           :format "json"}
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success [:data/valid-geo-data]
                  :on-failure [:errors/invalid-geo-data]}}))
 
-(reg-event-db
+(reg-event-fx
  :data/valid-geo-data
- (fn [{:keys [db]} [_ data]]
-   (assoc-in db [:data :api :geo] data)))
+ (fn [{:keys [db]} [_ data path]]
+   (let [{:keys [lat lon display_name]} (first data)]
+     {:db (-> db
+              (assoc-in [:data :api :geo] data)
+              (fork/set-submitting path false)
+              (fork/set-server-message path "Map Lookup succeeded!"))
+      :fx [[:dispatch [:data/maps [lat lon]]]
+           [:dispatch [:data/weather [lat lon]]]
+           [:dispatch [:data/movies display_name]]]})))
 
 (reg-event-db
  :errors/invalid-geo-data
- (fn [db [_ error]]
-   (assoc-in db [:errors :api :geo] error)))
+ (fn [db [_ [error path]]]
+   (-> db
+       (assoc-in [:errors :api :geo] error)
+       (fork/set-submitting path false)
+       (fork/set-server-message path "Map Lookup failed!"))))
 
 (reg-cofx
  :config/api-keys
@@ -36,7 +81,20 @@
    (assoc coeffects
           :location-iq-api-key (gobj/get js/CLOSURE_DEFINES "bhlie.rf_city.city_key")
           :weatherbit-api-key (gobj/get js/CLOSURE_DEFINES "bhlie.rf_city.weather_key")
-          :moviedb-api-key (gobj/get js/CLOSURE_DEFINES "bhlie.rf_city.movie_key"))))
+          :moviedb-api-key (gobj/get js/CLOSURE_DEFINES "bhlie.rf_city.movie_key")
+          :goog-maps-api-key (gobj/get js/CLOSURE_DEFINES "bhlie.rf_city.goog_maps_key"))))
+
+#_(reg-cofx
+ :config/geolocation-enabled?
+ (fn [coeffects]
+   (.addEventListener js/window "DOMContentLoaded"
+                      (fn [_]
+                        (.. js/window -navigator -geolocation
+                            (getCurrentPosition (fn [position] (let [lat (.. position -coords -latitude)
+                                                                     lon (.. position -coords -longitude)]
+                                                                 (-> coeffects
+                                                                     (assoc :current-lat lat)
+                                                                     (assoc :current-lon lon))))))))))
 
 (reg-event-fx
  :data/maps
@@ -95,6 +153,7 @@
 
 (reg-event-fx
  :config/initialize-app
+ 
  (fn [_ _]
    {:db {:current-route nil}}))
 
@@ -112,7 +171,12 @@
    (let [link-name (-> l :data :link-text)
          li (filter #(= link-name (.-textContent %))
                     (.querySelectorAll js/document "#route-link"))]
-     (some-> li first .-classList (.remove "bg-pink-200")))))
+     (some-> li first .-classList (doto
+                                   (.remove "bg-pink-200")
+                                    (.remove "border-pink-100")
+                                    (.remove "rounded-lg")
+                                    (.remove "shadow-lg")
+                                    (.remove "p-3"))))))
 
 (reg-fx
  :push-state
@@ -141,7 +205,12 @@
    (doseq [link links]
      (.addEventListener link "click"
                         (fn [e]
-                          (.. e -currentTarget -classList (add "bg-pink-200")))))))
+                          (doto (.. e -currentTarget -classList)
+                            (.add "bg-pink-200")
+                            (.add "border-pink-100")
+                            (.add "rounded-lg")
+                            (.add "shadow-lg")
+                            (.add "p-3")))))))
 
 (reg-event-fx
  :config/remove-event-listeners-on-reload

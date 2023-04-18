@@ -1,10 +1,10 @@
 (ns bhlie.rf-city.app
   (:require [re-frame.core :as re-frame :refer [dispatch]]
             [reagent.core :as r]
-            [goog.dom :as gdom] 
+            [goog.dom :as gdom]
             [bhlie.rf-city.events]
-            [bhlie.rf-city.views :refer [city-router]] 
-            [reitit.core :as rc] 
+            [bhlie.rf-city.views :refer [city-router]]
+            [reitit.core :as rc]
             [reitit.frontend.easy :as rfe :refer [start! href]]
             ["react-dom/client" :refer [createRoot]]))
 
@@ -21,19 +21,18 @@
     (for [route-name (rc/route-names router)
           :let       [route (rc/match-by-name router route-name)
                       text (-> route :data :link-text)]]
-      [:li {:id :route-link :key route-name} 
+      [:li {:id :route-link :key route-name}
        [:a {:href (href route-name)} text]])]])
 
 (defn router-component [{:keys [router]}]
   (let [current-route @(re-frame/subscribe [:app/current-route])]
-    [:div  
+    [:div
      [nav {:router router :current-route current-route}]
      (when current-route
        [(-> current-route :data :view)])]))
 
 (defn ^:dev/after-load mount-root []
   (re-frame/clear-subscription-cache!) 
-  (dispatch [:config/remove-event-listeners-on-reload])
   (.render root (r/as-element [router-component {:router city-router}])))
 
 #_{:clj-kondo/ignore [:clojure-lsp/unused-public-var]}

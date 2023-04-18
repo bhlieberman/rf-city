@@ -50,3 +50,7 @@
  :<- [:movies/basic-info]
  :<- [:app/movies.sort-key]
  (fn [[movies sort-key] _] (if (some? sort-key) (sort-by (keyword sort-key) movies) movies)))
+
+ (reg-sub
+ :app/current-location
+ :-> :user-loc)
