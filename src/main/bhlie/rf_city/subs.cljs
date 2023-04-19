@@ -14,7 +14,7 @@
  :<- [:geo/city-info]
  :=> first)
 
-(reg-sub
+#_(reg-sub
  :geo/city-others-match
  :<- [:geo/city-info]
  :=> rest)
@@ -52,5 +52,10 @@
  (fn [[movies sort-key] _] (if (some? sort-key) (sort-by (keyword sort-key) movies) movies)))
 
  (reg-sub
+ :config/current-location
+ :=> #(get % :current-loc))
+
+(reg-sub
  :app/current-location
- :-> :user-loc)
+ :<- [:config/current-location]
+ :=> (fn [{:keys [lat lon]}] (str "Latitude: " lat " Longitude: " lon)))

@@ -1,44 +1,31 @@
 (ns bhlie.rf-city.events
-  (:require [re-frame.core :as re-frame :refer [inject-cofx reg-fx reg-cofx reg-event-fx reg-event-db]]
+  (:require [re-frame.core :as re-frame :refer [inject-cofx reg-fx reg-cofx reg-event-fx reg-event-db dispatch]]
             [reitit.frontend.controllers :as rfc]
             [reitit.frontend.easy :as rfe :refer [push-state]]
             [day8.re-frame.http-fx]
-            [re-chain.core :as chain]
+            [re-chain.core :as chain :refer [reg-chain]]
             [ajax.core :as ajax]
             [fork.re-frame :as fork]
-            [goog.object :as gobj]))
+            [goog.object :as gobj]
+            [goog.dom :as gdom]))
 
 (reg-event-fx
- :debug/test-submit
- [(inject-cofx :config/api-keys)]
- (fn [{:keys [location-iq-api-key db]} [_ {:keys [path values]}]]
-   {:db (fork/set-submitting db path true)
-    :http-xhrio {:method :get
-                 :uri "https://us1.locationiq.com/v1/search.php"
-                 :timeout 8000
-                 :params {:key location-iq-api-key
-                          :q (get values "destination")
-                          :format "json"}
-                 :response-format (ajax/json-response-format {:keywords? true})
-                 :on-success [:debug/log-success]
-                 :on-failure [:debug/log-failure]}}))
+ :config/load-google-maps
+ (fn [_ _]
+   {:google-maps nil}))
+
+(reg-fx
+ :google-maps
+ (fn [_]
+   (-> (js/google.maps.importLibrary "maps")
+       (.then (fn [lib] (dispatch [:app/show-google-map (gobj/get lib "Map")]))))))
 
 (reg-event-fx
- :debug/log-success
- (fn [{:keys [db]} [_ result path]]
-   (js/console.log (str result))
-   {:db (-> db
-            (assoc :result result)
-            (fork/set-submitting path false)
-            (fork/set-server-message path "Map lookup succeeded!"))}))
-
-(reg-event-fx
- :debug/log-failure
- (fn [{:keys [db]} [_ result path]]
-   (js/console.log result)
-   {:db (-> db
-            (fork/set-submitting path false)
-            (fork/set-server-message path "Map lookup failed!"))}))
+ :app/show-google-map
+ (fn [{:keys [db]} [_ Map]]
+   {:db (assoc db :goog-map (Map. (gdom/getElement "map") #js {:center #js {:lat -34.000
+                                                                        :lng 157.000}
+                                                           :zoom 8}))}))
 
 (reg-event-fx
  :app/handle-form-submission
@@ -84,17 +71,25 @@
           :moviedb-api-key (gobj/get js/CLOSURE_DEFINES "bhlie.rf_city.movie_key")
           :goog-maps-api-key (gobj/get js/CLOSURE_DEFINES "bhlie.rf_city.goog_maps_key"))))
 
-#_(reg-cofx
+(reg-event-fx
  :config/geolocation-enabled?
- (fn [coeffects]
-   (.addEventListener js/window "DOMContentLoaded"
-                      (fn [_]
-                        (.. js/window -navigator -geolocation
-                            (getCurrentPosition (fn [position] (let [lat (.. position -coords -latitude)
-                                                                     lon (.. position -coords -longitude)]
-                                                                 (-> coeffects
-                                                                     (assoc :current-lat lat)
-                                                                     (assoc :current-lon lon))))))))))
+ (fn [_ _]
+   {:current-location nil}))
+
+(defn get-current-position []
+  (js/Promise. (fn [resolve reject] (.. js/window -navigator -geolocation (getCurrentPosition resolve reject)))))
+
+(reg-fx
+ :current-location
+ (fn [_]
+   (-> (get-current-position)
+       (.then (fn [data] (dispatch [:app/save-current-location (.. data -coords -latitude)
+                                    (.. data -coords -longitude)]))))))
+
+(reg-event-db
+ :app/save-current-location
+ (fn [db [_ lat lon]]
+   (assoc db :current-loc {:lat lat :lon lon})))
 
 (reg-event-fx
  :data/maps
@@ -117,6 +112,21 @@
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success [:data/valid-weather-data]
                  :on-failure [:errors/invalid-weather-data]}}))
+
+(reg-chain
+ :get-weather
+ [(inject-cofx :config/api-keys)]
+ (fn [{:keys [weatherbit-api-key]} [_ [lat lon]]]
+   {:http-xhrio {:method :get
+                 :uri "http://api.weatherbit.io/v2.0/forecast/daily"
+                 :timeout 8000
+                 :params {:lat lat
+                          :lon lon
+                          :key weatherbit-api-key}
+                 :response-format (ajax/json-response-format {:keywords? true}) 
+                 :on-failure [:errors/invalid-weather-data]}})
+ (fn [{:keys [db]} [_ data]]
+   {:db (assoc-in db [:data :api :weather] data)}))
 
 (reg-event-fx
  :data/movies
@@ -151,11 +161,18 @@
  (fn [db [_ error]]
    (assoc-in db [:errors :api :weather] error)))
 
+#_(defn get-geolocation-data []
+    {:first-dispatch [:config/geolocation-enabled?]
+     :rules [{:when :seen? :events :config/geolocation-enabled? :dispatch [:app/get-current-location]}]})
+
 (reg-event-fx
  :config/initialize-app
- 
  (fn [_ _]
-   {:db {:current-route nil}}))
+   {:db {:current-route nil}
+    :fx [[:dispatch [:config/geolocation-enabled?]]
+         [:dispatch [:config/load-google-maps]]
+         [:dispatch [:app/show-google-map]]]
+    #_:async-flow #_(get-geolocation-data)}))
 
 (reg-event-fx
  :app/navigated
@@ -211,15 +228,3 @@
                             (.add "rounded-lg")
                             (.add "shadow-lg")
                             (.add "p-3")))))))
-
-(reg-event-fx
- :config/remove-event-listeners-on-reload
- (fn [_ _]
-   {:remove-event-listeners (.querySelectorAll js/document "#route-link")}))
-
-(reg-fx
- :remove-event-listeners
- (fn [links]
-   (doseq [l links]
-     (.removeEventListener l "click" (fn [e]
-                                       (.. e -currentTarget -classList (add "bg-pink-200")))))))

@@ -3,16 +3,8 @@
             [re-frame.core :as re-frame :refer [subscribe dispatch]]
             [reagent.core :as r]
             [fork.re-frame :as fork]
+            [goog.object :as gobj]
             [reitit.frontend :refer [router]]))
-
-(defn error-boundary [& _]
-  (let [err-state (r/atom nil)]
-    (r/create-class {:display-name "ErrBoundary"
-                     :reagent-render (fn [& children]
-                                       (if (nil? @err-state)
-                                         (into [:<>] children)
-                                         [:p "Sorry, something went wrong..."]))
-                     :get-derived-state-from-error (fn [error] (reset! err-state error))})))
 
 (defn get-city-info []
   [:div {:id :user-info-entry}
@@ -28,6 +20,7 @@
               :id form-id
               :on-submit handle-submit}
        [:input {:id :destination
+                :required true
                 :name "destination"
                 :value (values "destination")
                 :type "textarea"
@@ -91,11 +84,16 @@
         [:p "High " max_temp (str "\u00B0" "C")]
         [:p desc]])]))
 
+(defn current-location []
+  [:div {:id :user-loc}
+   [:p#current-loc (str "Your current location is: " @(subscribe [:app/current-location]))]])
+
 (defn home []
-  [:div [:div {:id :welcome-msg}
+  [:div {:id :home-page} [:div {:id :welcome-msg}
          [:img {:src "/icons8-globe-30.png" :id :globe}]
          [:p "Welcome to City Explorer!"]
-         [:p "Here you can explore things to do in your favorite cities around the globe! Plan a trip in the search tab, or view maps, movies, or weather data."]]])
+         [:p "Here you can explore things to do in your favorite cities around the globe! Plan a trip in the search tab, or view maps, movies, or weather data."]]
+   [current-location]])
 
 (def city-router (router ["/"
                           ["" {:name :home

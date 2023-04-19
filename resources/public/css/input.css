@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-    @apply bg-amber-100
-}
 
 #app {
     @apply w-screen
@@ -114,4 +111,16 @@ h6 {
     @apply w-96 mx-auto p-2 border border-white border-collapse rounded-lg
      bg-white m-2 text-lg  font-serif text-center shadow-lg shadow-slate-50/90
     flex items-center justify-center space-x-10 h-auto
+}
+
+#home-page {
+    @apply flex flex-col justify-center
+}
+
+#user-loc {
+    @apply mx-auto border border-collapse rounded-lg shadow-lg bg-white m-2 text-lg font-serif text-center shadow-slate-50/90 p-2
+}
+
+#map {
+    @apply h-full
 }

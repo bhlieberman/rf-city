@@ -3,6 +3,7 @@
             [reagent.core :as r]
             [goog.dom :as gdom]
             [bhlie.rf-city.events]
+            [re-chain.core :as chain]
             [bhlie.rf-city.views :refer [city-router]]
             [reitit.core :as rc]
             [reitit.frontend.easy :as rfe :refer [start! href]]
@@ -38,5 +39,8 @@
 #_{:clj-kondo/ignore [:clojure-lsp/unused-public-var]}
 (defn init []
   (re-frame/dispatch-sync [:config/initialize-app])
+  (chain/configure! [{:effect-present?   (fn [effects] (:http-xhrio effects))
+                      :get-dispatch (fn [effects] (get-in effects [:http-xhrio :on-success]))
+                      :set-dispatch   (fn [effects dispatch] (assoc-in effects [:http-xhrio :on-success] dispatch))}])
   (init-routes!)
   (mount-root))
