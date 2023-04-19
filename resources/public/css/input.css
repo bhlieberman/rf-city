@@ -2,32 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-    @apply bg-amber-100
-}
 
 #app {
-    @apply flex flex-col items-center
+    @apply w-screen
 }
 
 #main {
-    @apply flex flex-col items-center
+    @apply container
 }
 
 #top-banner {
-    @apply w-full bg-slate-200
+    @apply bg-slate-200 p-2 text-lg
 }
 
-#static-map {
-    @apply flex flex-col items-center border border-collapse border-slate-100 mt-2 mb-2
+#user-info-entry {
+    @apply w-1/6 mx-auto container my-2
+}
+
+#map-container {
+    @apply p-2
 }
 
 #user-info-entry form {
-    @apply flex flex-col items-center bg-slate-200 p-3 mt-2 mb-auto
+    /* @apply flex flex-col items-center bg-slate-200 p-3 mt-2 mb-auto */
+    @apply flex flex-col items-center bg-slate-200 p-3
 }
 
-#destination, #date-from, #date-to {
-    @apply shadow-md p-2 m-2
+#destination,
+#date-from,
+#date-to {
+    @apply shadow-md p-2 m-2 w-5/6
 }
 
 #submit-search {
@@ -54,6 +58,14 @@ html {
     @apply font-bold
 }
 
+ul {
+    @apply flex p-3 items-center
+}
+
+li {
+    @apply mx-auto
+}
+
 #nav {
     @apply list-none flex items-center bg-slate-100 p-2 space-x-10 w-full
 }
@@ -70,10 +82,45 @@ h2 {
     @apply text-3xl
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     @apply m-auto
 }
 
 #route-link:hover {
-    @apply bg-pink-200
+    @apply bg-pink-200 rounded-lg p-1
+}
+
+#movies {
+    @apply flex flex-col items-center m-2
+}
+
+#movies-list {
+    @apply p-2
+}
+
+#movies-each { 
+    @apply p-2 m-2
+}
+
+#welcome-msg {
+    @apply w-96 mx-auto p-2 border border-white border-collapse rounded-lg
+     bg-white m-2 text-lg  font-serif text-center shadow-lg shadow-slate-50/90
+    flex items-center justify-center space-x-10 h-auto
+}
+
+#home-page {
+    @apply flex flex-col justify-center
+}
+
+#user-loc {
+    @apply mx-auto border border-collapse rounded-lg shadow-lg bg-white m-2 text-lg font-serif text-center shadow-slate-50/90 p-2
+}
+
+#map {
+    @apply h-full
 }
