@@ -4,6 +4,7 @@
             [reagent.core :as r]
             [fork.re-frame :as fork]
             [goog.object :as gobj]
+            [goog.dom :as gdom]
             [reitit.frontend :refer [router]]))
 
 (defn get-city-info []
@@ -38,10 +39,25 @@
                  :type :submit
                  :disabled submitting?} "Get trip info"]])]])
 
+(defn gmap-inner []
+  (let [{:keys [lat lon]} (r/props (r/current-component))]
+    (r/create-class {:reagent-render (fn [] [:div
+                                            [:div#map-canvas {:style {:height "400px"}}]])
+                    :component-did-mount (fn [_] (let [canvas (gdom/getElement "map-canvas")]
+                                                   (dispatch [:config/load-google-maps {:canvas canvas
+                                                                                        :lat (js/parseFloat lat)
+                                                                                        :lon (js/parseFloat lon)
+                                                                                        :zoom 13}])))})))
+
+(defn gmap-outer []
+  (let [pos @(subscribe [:geo/live-map-coords])] 
+    (fn [] [gmap-inner pos])))
+
 (defn map-tile []
   [:div {:id :map-container}
    [:img {:src @(subscribe [:geo/static-map])
-          :id :static-map}]])
+          :id :static-map}]
+   [gmap-outer]])
 
 (defn city-tile []
   (let [{:keys [display_name lat lon]} @(subscribe [:geo/city-top-match])
@@ -89,11 +105,11 @@
    [:p#current-loc (str "Your current location is: " @(subscribe [:app/current-location]))]])
 
 (defn home []
-  [:div {:id :home-page} [:div {:id :welcome-msg}
-         [:img {:src "/icons8-globe-30.png" :id :globe}]
-         [:p "Welcome to City Explorer!"]
-         [:p "Here you can explore things to do in your favorite cities around the globe! Plan a trip in the search tab, or view maps, movies, or weather data."]]
-   [current-location]])
+  [:div {:id :home-page}
+   [:div {:id :welcome-msg}
+    [:img {:src "/icons8-globe-30.png" :id :globe}]
+    [:p "Welcome to City Explorer!"] 
+    [:p "Here you can explore things to do in your favorite cities around the globe! Plan a trip in the search tab, or view maps, movies, or weather data."]]])
 
 (def city-router (router ["/"
                           ["" {:name :home

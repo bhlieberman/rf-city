@@ -4,7 +4,7 @@
             [goog.dom :as gdom]
             [bhlie.rf-city.events]
             [re-chain.core :as chain]
-            [bhlie.rf-city.views :refer [city-router]]
+            [bhlie.rf-city.views :refer [city-router home]]
             [reitit.core :as rc]
             [reitit.frontend.easy :as rfe :refer [start! href]]
             ["react-dom/client" :refer [createRoot]]))

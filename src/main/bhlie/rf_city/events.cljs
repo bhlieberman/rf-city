@@ -7,25 +7,29 @@
             [ajax.core :as ajax]
             [fork.re-frame :as fork]
             [goog.object :as gobj]
-            [goog.dom :as gdom]))
+            [goog.dom :as gdom]
+            [shadow.cljs.modern :refer [js-await]]))
 
 (reg-event-fx
  :config/load-google-maps
- (fn [_ _]
-   {:google-maps nil}))
+ (fn [_ [_ opts]]
+   {:google-maps opts}))
 
 (reg-fx
  :google-maps
- (fn [_]
-   (-> (js/google.maps.importLibrary "maps")
-       (.then (fn [lib] (dispatch [:app/show-google-map (gobj/get lib "Map")]))))))
+ (fn [{:keys [canvas lat lon zoom]}]
+   (js-await [lib (js/google.maps.importLibrary "maps")]
+             (let [Map (gobj/get lib "Map")
+                   BicyclingLayer (gobj/get lib "BicyclingLayer")
+                   bike-layer (BicyclingLayer.)]
+               (.setMap bike-layer (Map. canvas #js {:center #js {:lat lat
+                                               :lng lon}
+                                  :zoom zoom}))))))
 
 (reg-event-fx
  :app/show-google-map
- (fn [{:keys [db]} [_ Map]]
-   {:db (assoc db :goog-map (Map. (gdom/getElement "map") #js {:center #js {:lat -34.000
-                                                                        :lng 157.000}
-                                                           :zoom 8}))}))
+ (fn [{:keys [db]} [_ map]]
+   {:db (assoc db :goog-map map)}))
 
 (reg-event-fx
  :app/handle-form-submission
@@ -123,7 +127,7 @@
                  :params {:lat lat
                           :lon lon
                           :key weatherbit-api-key}
-                 :response-format (ajax/json-response-format {:keywords? true}) 
+                 :response-format (ajax/json-response-format {:keywords? true})
                  :on-failure [:errors/invalid-weather-data]}})
  (fn [{:keys [db]} [_ data]]
    {:db (assoc-in db [:data :api :weather] data)}))
@@ -169,9 +173,7 @@
  :config/initialize-app
  (fn [_ _]
    {:db {:current-route nil}
-    :fx [[:dispatch [:config/geolocation-enabled?]]
-         [:dispatch [:config/load-google-maps]]
-         [:dispatch [:app/show-google-map]]]
+    :fx [[:dispatch [:config/geolocation-enabled?]]]
     #_:async-flow #_(get-geolocation-data)}))
 
 (reg-event-fx

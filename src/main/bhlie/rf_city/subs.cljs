@@ -14,6 +14,11 @@
  :<- [:geo/city-info]
  :=> first)
 
+(reg-sub
+ :geo/live-map-coords
+ :<- [:geo/city-top-match]
+ :=> (fn [{:keys [lat lon]}] {:lat lat :lon lon}))
+
 #_(reg-sub
  :geo/city-others-match
  :<- [:geo/city-info]
@@ -59,3 +64,7 @@
  :app/current-location
  :<- [:config/current-location]
  :=> (fn [{:keys [lat lon]}] (str "Latitude: " lat " Longitude: " lon)))
+
+(reg-sub
+ :app/goog-map
+ :-> :goog-map)
