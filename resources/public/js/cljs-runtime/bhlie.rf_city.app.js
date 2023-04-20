@@ -15,31 +15,31 @@ return null;
 }
 }),new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"use-fragment","use-fragment",-1617737154),false], null));
 });
-bhlie.rf_city.app.nav = (function bhlie$rf_city$app$nav(p__32981){
-var map__32982 = p__32981;
-var map__32982__$1 = cljs.core.__destructure_map(map__32982);
-var router = cljs.core.get.cljs$core$IFn$_invoke$arity$2(map__32982__$1,new cljs.core.Keyword(null,"router","router",1091916230));
-return new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"div","div",1057191632),new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"id","id",-1388402092),new cljs.core.Keyword(null,"top-banner","top-banner",2032563138)], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"ul","ul",-1349521403),(function (){var iter__5523__auto__ = (function bhlie$rf_city$app$nav_$_iter__32983(s__32984){
+bhlie.rf_city.app.nav = (function bhlie$rf_city$app$nav(p__33358){
+var map__33359 = p__33358;
+var map__33359__$1 = cljs.core.__destructure_map(map__33359);
+var router = cljs.core.get.cljs$core$IFn$_invoke$arity$2(map__33359__$1,new cljs.core.Keyword(null,"router","router",1091916230));
+return new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"div","div",1057191632),new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"id","id",-1388402092),new cljs.core.Keyword(null,"top-banner","top-banner",2032563138)], null),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"ul","ul",-1349521403),(function (){var iter__5523__auto__ = (function bhlie$rf_city$app$nav_$_iter__33363(s__33364){
 return (new cljs.core.LazySeq(null,(function (){
-var s__32984__$1 = s__32984;
+var s__33364__$1 = s__33364;
 while(true){
-var temp__5804__auto__ = cljs.core.seq(s__32984__$1);
+var temp__5804__auto__ = cljs.core.seq(s__33364__$1);
 if(temp__5804__auto__){
-var s__32984__$2 = temp__5804__auto__;
-if(cljs.core.chunked_seq_QMARK_(s__32984__$2)){
-var c__5521__auto__ = cljs.core.chunk_first(s__32984__$2);
+var s__33364__$2 = temp__5804__auto__;
+if(cljs.core.chunked_seq_QMARK_(s__33364__$2)){
+var c__5521__auto__ = cljs.core.chunk_first(s__33364__$2);
 var size__5522__auto__ = cljs.core.count(c__5521__auto__);
-var b__32986 = cljs.core.chunk_buffer(size__5522__auto__);
-if((function (){var i__32985 = (0);
+var b__33366 = cljs.core.chunk_buffer(size__5522__auto__);
+if((function (){var i__33365 = (0);
 while(true){
-if((i__32985 < size__5522__auto__)){
-var route_name = cljs.core._nth(c__5521__auto__,i__32985);
+if((i__33365 < size__5522__auto__)){
+var route_name = cljs.core._nth(c__5521__auto__,i__33365);
 var route = reitit.core.match_by_name(router,route_name);
 var text = new cljs.core.Keyword(null,"link-text","link-text",224432076).cljs$core$IFn$_invoke$arity$1(new cljs.core.Keyword(null,"data","data",-232669377).cljs$core$IFn$_invoke$arity$1(route));
-cljs.core.chunk_append(b__32986,new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"li","li",723558921),new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"id","id",-1388402092),new cljs.core.Keyword(null,"route-link","route-link",-1778351466),new cljs.core.Keyword(null,"key","key",-1516042587),route_name], null),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"a","a",-2123407586),new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"href","href",-793805698),reitit.frontend.easy.href.cljs$core$IFn$_invoke$arity$1(route_name)], null),text], null)], null));
+cljs.core.chunk_append(b__33366,new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"li","li",723558921),new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"id","id",-1388402092),new cljs.core.Keyword(null,"route-link","route-link",-1778351466),new cljs.core.Keyword(null,"key","key",-1516042587),route_name], null),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"a","a",-2123407586),new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"href","href",-793805698),reitit.frontend.easy.href.cljs$core$IFn$_invoke$arity$1(route_name)], null),text], null)], null));
 
-var G__33001 = (i__32985 + (1));
-i__32985 = G__33001;
+var G__33378 = (i__33365 + (1));
+i__33365 = G__33378;
 continue;
 } else {
 return true;
@@ -47,15 +47,15 @@ return true;
 break;
 }
 })()){
-return cljs.core.chunk_cons(cljs.core.chunk(b__32986),bhlie$rf_city$app$nav_$_iter__32983(cljs.core.chunk_rest(s__32984__$2)));
+return cljs.core.chunk_cons(cljs.core.chunk(b__33366),bhlie$rf_city$app$nav_$_iter__33363(cljs.core.chunk_rest(s__33364__$2)));
 } else {
-return cljs.core.chunk_cons(cljs.core.chunk(b__32986),null);
+return cljs.core.chunk_cons(cljs.core.chunk(b__33366),null);
 }
 } else {
-var route_name = cljs.core.first(s__32984__$2);
+var route_name = cljs.core.first(s__33364__$2);
 var route = reitit.core.match_by_name(router,route_name);
 var text = new cljs.core.Keyword(null,"link-text","link-text",224432076).cljs$core$IFn$_invoke$arity$1(new cljs.core.Keyword(null,"data","data",-232669377).cljs$core$IFn$_invoke$arity$1(route));
-return cljs.core.cons(new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"li","li",723558921),new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"id","id",-1388402092),new cljs.core.Keyword(null,"route-link","route-link",-1778351466),new cljs.core.Keyword(null,"key","key",-1516042587),route_name], null),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"a","a",-2123407586),new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"href","href",-793805698),reitit.frontend.easy.href.cljs$core$IFn$_invoke$arity$1(route_name)], null),text], null)], null),bhlie$rf_city$app$nav_$_iter__32983(cljs.core.rest(s__32984__$2)));
+return cljs.core.cons(new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"li","li",723558921),new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"id","id",-1388402092),new cljs.core.Keyword(null,"route-link","route-link",-1778351466),new cljs.core.Keyword(null,"key","key",-1516042587),route_name], null),new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"a","a",-2123407586),new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null,"href","href",-793805698),reitit.frontend.easy.href.cljs$core$IFn$_invoke$arity$1(route_name)], null),text], null)], null),bhlie$rf_city$app$nav_$_iter__33363(cljs.core.rest(s__33364__$2)));
 }
 } else {
 return null;
@@ -67,10 +67,10 @@ break;
 return iter__5523__auto__(reitit.core.route_names(router));
 })()], null)], null);
 });
-bhlie.rf_city.app.router_component = (function bhlie$rf_city$app$router_component(p__32999){
-var map__33000 = p__32999;
-var map__33000__$1 = cljs.core.__destructure_map(map__33000);
-var router = cljs.core.get.cljs$core$IFn$_invoke$arity$2(map__33000__$1,new cljs.core.Keyword(null,"router","router",1091916230));
+bhlie.rf_city.app.router_component = (function bhlie$rf_city$app$router_component(p__33376){
+var map__33377 = p__33376;
+var map__33377__$1 = cljs.core.__destructure_map(map__33377);
+var router = cljs.core.get.cljs$core$IFn$_invoke$arity$2(map__33377__$1,new cljs.core.Keyword(null,"router","router",1091916230));
 var current_route = cljs.core.deref(re_frame.core.subscribe.cljs$core$IFn$_invoke$arity$1(new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword("app","current-route","app/current-route",2067564805)], null)));
 return new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"div","div",1057191632),new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [bhlie.rf_city.app.nav,new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null,"router","router",1091916230),router,new cljs.core.Keyword(null,"current-route","current-route",2067529448),current_route], null)], null),(cljs.core.truth_(current_route)?new cljs.core.PersistentVector(null, 1, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null,"view","view",1247994814).cljs$core$IFn$_invoke$arity$1(new cljs.core.Keyword(null,"data","data",-232669377).cljs$core$IFn$_invoke$arity$1(current_route))], null):null)], null);
 });
