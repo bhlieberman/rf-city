@@ -2,8 +2,7 @@
   (:require [bhlie.rf-city.subs]
             [re-frame.core :as re-frame :refer [subscribe dispatch]]
             [reagent.core :as r]
-            [fork.re-frame :as fork]
-            [goog.object :as gobj]
+            [fork.re-frame :as fork] 
             [goog.dom :as gdom]
             [reitit.frontend :refer [router]]))
 

@@ -8,7 +8,8 @@
             [fork.re-frame :as fork]
             [goog.object :as gobj]
             [goog.dom :as gdom]
-            [shadow.cljs.modern :refer [js-await]]))
+            [shadow.cljs.modern :refer [js-await]]
+            ["@googlemaps/js-api-loader" :refer [Loader]]))
 
 (reg-event-fx
  :config/load-google-maps
@@ -18,13 +19,15 @@
 (reg-fx
  :google-maps
  (fn [{:keys [canvas lat lon zoom]}]
-   (js-await [lib (js/google.maps.importLibrary "maps")]
-             (let [Map (gobj/get lib "Map")
-                   BicyclingLayer (gobj/get lib "BicyclingLayer")
-                   bike-layer (BicyclingLayer.)]
-               (.setMap bike-layer (Map. canvas #js {:center #js {:lat lat
-                                               :lng lon}
-                                  :zoom zoom}))))))
+   (js-await [_ (.load (Loader. #js {:apiKey (gobj/get js/CLOSURE_DEFINES "bhlie.rf_city.goog_maps_key")
+                                          :version "weekly"}))]
+             (js-await [lib (js/google.maps.importLibrary "maps")]
+              (let [Map (gobj/get lib "Map")
+                    BicyclingLayer (gobj/get lib "BicyclingLayer")
+                    bike-layer (BicyclingLayer.)]
+                (.setMap bike-layer (Map. canvas #js {:center #js {:lat lat
+                                                                   :lng lon}
+                                                      :zoom zoom})))))))
 
 (reg-event-fx
  :app/show-google-map
@@ -108,7 +111,7 @@
  [(inject-cofx :config/api-keys)]
  (fn [{:keys [weatherbit-api-key]} [_ [lat lon]]]
    {:http-xhrio {:method :get
-                 :uri "http://api.weatherbit.io/v2.0/forecast/daily"
+                 :uri "https://api.weatherbit.io/v2.0/forecast/daily"
                  :timeout 8000
                  :params {:lat lat
                           :lon lon
