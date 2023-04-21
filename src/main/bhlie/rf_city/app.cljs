@@ -7,6 +7,12 @@
             [bhlie.rf-city.views :refer [city-router home]]
             [reitit.core :as rc]
             [reitit.frontend.easy :as rfe :refer [start! href]]
+            [reagent-mui.material.app-bar :refer [app-bar]]
+            [reagent-mui.material.container :refer [container]]
+            [reagent-mui.material.toolbar :refer [toolbar]]
+            [reagent-mui.material.tooltip :refer [tooltip]]
+            [reagent-mui.material.box :refer [box]]
+            [reagent-mui.material.button :refer [button]]
             ["react-dom/client" :refer [createRoot]]))
 
 (defonce root (createRoot (gdom/getElement "app")))
@@ -17,13 +23,17 @@
           {:use-fragment false}))
 
 (defn nav [{:keys [router]}]
-  [:div {:id :top-banner}
-   [:ul
-    (for [route-name (rc/route-names router)
-          :let       [route (rc/match-by-name router route-name)
-                      text (-> route :data :link-text)]]
-      [:li {:id :route-link :key route-name}
-       [:a {:href (href route-name)} text]])]])
+  [app-bar {:id :top-banner
+            :position :static}
+   [container {:max-width "xl"}
+    [toolbar
+     [box {:sx {:flex-grow 1 :display {:xs "none" :md "flex"}}}
+      (for [route-name (rc/route-names router)
+            :let       [route (rc/match-by-name router route-name)
+                        text (-> route :data :link-text)]]
+        [button {:id :route-link :key route-name
+                 :sx {:my 2 :color "white" :display :block}}
+         [:a {:href (href route-name)} text]])]]]])
 
 (defn router-component [{:keys [router]}]
   (let [current-route @(re-frame/subscribe [:app/current-route])]
@@ -33,7 +43,7 @@
        [(-> current-route :data :view)])]))
 
 (defn ^:dev/after-load mount-root []
-  (re-frame/clear-subscription-cache!) 
+  (re-frame/clear-subscription-cache!)
   (.render root (r/as-element [router-component {:router city-router}])))
 
 #_{:clj-kondo/ignore [:clojure-lsp/unused-public-var]}

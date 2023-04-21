@@ -12,7 +12,7 @@
 }
 
 #top-banner {
-    @apply bg-slate-200 p-2 text-lg
+    @apply bg-slate-800 p-2 text-lg
 }
 
 #user-info-entry {
@@ -23,19 +23,23 @@
     @apply p-2
 }
 
-#user-info-entry form {
+#user-info-entry .form-entry {
     /* @apply flex flex-col items-center bg-slate-200 p-3 mt-2 mb-auto */
-    @apply flex flex-col items-center bg-slate-200 p-3
+    @apply flex flex-col items-center bg-slate-200 p-3 m-3 border rounded-lg text-center
 }
 
-#destination,
+
 #date-from,
 #date-to {
-    @apply shadow-md p-2 m-2 w-5/6
+    @apply shadow-md p-2 m-5 w-5/6
 }
 
 #submit-search {
-    @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded
+    @apply m-2
+}
+
+#from-label, #to-label {
+    @apply m-2
 }
 
 #city-info {
@@ -88,7 +92,7 @@ h3,
 h4,
 h5,
 h6 {
-    @apply m-auto
+    @apply m-auto font-['Roboto']
 }
 
 #route-link:hover {
@@ -109,7 +113,7 @@ h6 {
 
 #welcome-msg {
     @apply w-96 mx-auto p-2 border border-white border-collapse rounded-lg
-     bg-white m-2 text-lg  font-serif text-center shadow-lg shadow-slate-50/90
+     bg-slate-200 m-2 text-lg text-center shadow-lg shadow-slate-50/90
     flex items-center justify-center space-x-10 h-auto
 }
 
@@ -118,7 +122,7 @@ h6 {
 }
 
 #user-loc {
-    @apply mx-auto border border-collapse rounded-lg shadow-lg bg-white m-2 text-lg font-serif text-center shadow-slate-50/90 p-2
+    @apply mx-auto border border-collapse rounded-lg shadow-lg bg-white m-2 text-lg text-center shadow-slate-50/90 p-2
 }
 
 #map {

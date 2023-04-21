@@ -44,7 +44,7 @@ html {
   -o-tab-size: 4;
      tab-size: 4;
   /* 3 */
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: Roboto;
   /* 4 */
   font-feature-settings: normal;
   /* 5 */
@@ -516,6 +516,56 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
+.container {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+}
+
+.static {
+  position: static;
+}
+
+.block {
+  display: block;
+}
+
+.flex {
+  display: flex;
+}
+
+.hidden {
+  display: none;
+}
+
 .rounded-lg {
   border-radius: 0.5rem;
 }
@@ -590,7 +640,7 @@ video {
 
 #top-banner {
   --tw-bg-opacity: 1;
-  background-color: rgb(226 232 240 / var(--tw-bg-opacity));
+  background-color: rgb(30 41 59 / var(--tw-bg-opacity));
   padding: 0.5rem;
   font-size: 1.125rem;
   line-height: 1.75rem;
@@ -642,20 +692,23 @@ video {
   padding: 0.5rem;
 }
 
-#user-info-entry form {
+#user-info-entry .form-entry {
   /* @apply flex flex-col items-center bg-slate-200 p-3 mt-2 mb-auto */
+  margin: 0.75rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-radius: 0.5rem;
+  border-width: 1px;
   --tw-bg-opacity: 1;
   background-color: rgb(226 232 240 / var(--tw-bg-opacity));
-  padding: 0.75rem
+  padding: 0.75rem;
+  text-align: center
 }
 
-#destination,
 #date-from,
 #date-to {
-  margin: 0.5rem;
+  margin: 1.25rem;
   width: 83.333333%;
   padding: 0.5rem;
   --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
@@ -664,21 +717,11 @@ video {
 }
 
 #submit-search {
-  border-radius: 0.25rem;
-  --tw-bg-opacity: 1;
-  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  font-weight: 700;
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
+  margin: 0.5rem;
 }
 
-#submit-search:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(29 78 216 / var(--tw-bg-opacity));
+#from-label, #to-label {
+  margin: 0.5rem;
 }
 
 #city-info {
@@ -768,6 +811,7 @@ h4,
 h5,
 h6 {
   margin: auto;
+  font-family: 'Roboto';
 }
 
 #route-link:hover {
@@ -817,10 +861,9 @@ h6 {
   --tw-border-opacity: 1;
   border-color: rgb(255 255 255 / var(--tw-border-opacity));
   --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  background-color: rgb(226 232 240 / var(--tw-bg-opacity));
   padding: 0.5rem;
   text-align: center;
-  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   font-size: 1.125rem;
   line-height: 1.75rem;
   --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
@@ -847,7 +890,6 @@ h6 {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
   padding: 0.5rem;
   text-align: center;
-  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   font-size: 1.125rem;
   line-height: 1.75rem;
   --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
