@@ -8,6 +8,7 @@
             [fork.re-frame :as fork]
             [goog.object :as gobj]
             [goog.dom :as gdom]
+            [bhlie.rf-city.webgl :refer [init-map]]
             [shadow.cljs.modern :refer [js-await]]
             ["@googlemaps/js-api-loader" :refer [Loader]]))
 
@@ -18,21 +19,26 @@
 
 (reg-fx
  :google-maps
- (fn [{:keys [canvas lat lon zoom]}]
+ (fn [{:keys [canvas lat lon zoom] :as opts}]
    (js-await [_ (.load (Loader. #js {:apiKey (gobj/get js/CLOSURE_DEFINES "bhlie.rf_city.goog_maps_key")
-                                          :version "weekly"}))]
+                                     :version "weekly"}))]
              (js-await [lib (js/google.maps.importLibrary "maps")]
-              (let [Map (gobj/get lib "Map")
-                    BicyclingLayer (gobj/get lib "BicyclingLayer")
-                    bike-layer (BicyclingLayer.)]
-                (.setMap bike-layer (Map. canvas #js {:center #js {:lat lat
-                                                                   :lng lon}
-                                                      :zoom zoom})))))))
-
-(reg-event-fx
- :app/show-google-map
- (fn [{:keys [db]} [_ map]]
-   {:db (assoc db :goog-map map)}))
+                       (let [Map (gobj/get lib "Map")
+                             WebGLOverlayView (gobj/get lib "WebGLOverlayView")
+                             BicyclingLayer (gobj/get lib "BicyclingLayer")
+                             bike-layer (BicyclingLayer.)]
+                         (init-map (Map. canvas (clj->js {:center {:lat lat :lng lon}
+                                                          :zoom zoom})) (WebGLOverlayView.) #js {:tilt 0,
+                                                                                             :heading 0,
+                                                                                             :zoom 18
+                                                                                             :center {:lat lat :lng lon},
+                                                                                             :mapId "15431d2b469f209e",
+                                                                                             :disableDefaultUI true,
+                                                                                             :gestureHandling "none",
+                                                                                             :keyboardShortcuts false})
+                         (.setMap bike-layer (Map. canvas #js {:center #js {:lat lat
+                                                                            :lng lon}
+                                                               :zoom zoom})))))))
 
 (reg-event-fx
  :app/handle-form-submission
