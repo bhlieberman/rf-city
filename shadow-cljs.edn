@@ -25,10 +25,10 @@
   :asset-path "/js" 
   :modules {:app {:init-fn bhlie.rf-city.app/init}}
   :devtools {:preloads [day8.re-frame-10x.preload]} 
-  :closure-defines {bhlie.rf-city.city-key #shadow/env "CITY_KEY"
-                    bhlie.rf-city.weather-key #shadow/env "WEATHER_KEY"
-                    bhlie.rf-city.movie-key #shadow/env "MOVIE_KEY"
-                    bhlie.rf-city.goog-maps-key #shadow/env "GOOG_MAPS_KEY"}
+  :closure-defines {bhlie.rf-city.events/CITY-KEY #shadow/env "CITY_KEY"
+                    bhlie.rf-city.events/WEATHER-KEY #shadow/env "WEATHER_KEY"
+                    bhlie.rf-city.events/MOVIE-KEY #shadow/env "MOVIE_KEY"
+                    bhlie.rf-city.events/GOOG-MAPS-KEY #shadow/env "GOOG_MAPS_KEY"}
   :dev {:compiler-options
         {:closure-defines
          {re-frame.trace.trace-enabled? true
@@ -36,4 +36,4 @@
   :release {:build-options
             {:ns-aliases
              {day8.re-frame.tracing day8.re-frame.tracing-stubs}}
-            :compiler-options {:optimizations :simple}}}}}
+            :compiler-options {:optimizations :advanced}}}}}

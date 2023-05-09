@@ -6,11 +6,15 @@
             [re-chain.core :as chain :refer [reg-chain]]
             [ajax.core :as ajax]
             [fork.re-frame :as fork]
-            [goog.object :as gobj]
-            [goog.dom :as gdom]
+            [goog.object :as gobj] 
             [bhlie.rf-city.webgl :refer [init-map]]
             [shadow.cljs.modern :refer [js-await]]
             ["@googlemaps/js-api-loader" :refer [Loader]]))
+
+(goog-define GOOG-MAPS-KEY "")
+(goog-define CITY-KEY "")
+(goog-define WEATHER-KEY "")
+(goog-define MOVIE-KEY "")
 
 (reg-event-fx
  :config/load-google-maps
@@ -20,7 +24,7 @@
 (reg-fx
  :google-maps
  (fn [{:keys [canvas lat lon zoom] :as opts}]
-   (js-await [_ (.load (Loader. #js {:apiKey (gobj/get js/CLOSURE_DEFINES "bhlie.rf_city.goog_maps_key")
+   (js-await [_ (.load (Loader. #js {:apiKey GOOG-MAPS-KEY
                                      :version "weekly"}))]
              (js-await [lib (js/google.maps.importLibrary "maps")]
                        (let [Map (gobj/get lib "Map")
@@ -79,10 +83,10 @@
  :config/api-keys
  (fn [coeffects]
    (assoc coeffects
-          :location-iq-api-key (gobj/get js/CLOSURE_DEFINES "bhlie.rf_city.city_key")
-          :weatherbit-api-key (gobj/get js/CLOSURE_DEFINES "bhlie.rf_city.weather_key")
-          :moviedb-api-key (gobj/get js/CLOSURE_DEFINES "bhlie.rf_city.movie_key")
-          :goog-maps-api-key (gobj/get js/CLOSURE_DEFINES "bhlie.rf_city.goog_maps_key"))))
+          :location-iq-api-key CITY-KEY
+          :weatherbit-api-key WEATHER-KEY
+          :moviedb-api-key MOVIE-KEY
+          :goog-maps-api-key GOOG-MAPS-KEY)))
 
 (reg-event-fx
  :config/geolocation-enabled?
